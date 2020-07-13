@@ -6,7 +6,8 @@ In this repository you can find the ImageJ plugin source code, Microsoft Excel m
 
 ### This ImageJ plugin enables semi-automatic identification and quantification of image objects, with the opportunity to employ varying degrees of automation as desired. The  colocalization Object Counter is optimized for annotating and keeping track of each object’s colocalization category, that is, which fluorescent label(s) are associated with each object. The plugin also contains basic tools for subsequent 3D reconstruction of object and tissue contour data. 
 
-![alt text]https://github.com/Anders-Lunde/Colocalization_Object_Counter/blob/master/Colocalization%20Object%20Counter%20menu.png "Colocalization Object Counter menu")
+![alt text](https://github.com/Anders-Lunde/Colocalization_Object_Counter/blob/master/Colocalization%20Object%20Counter%20menu.png "Colocalization Object Counter menu")
+
 ## Purpose, input requirements, operation and output:
 
 The Colocalization Object Counter plugin enables semi-automatic identification, quantification and
