@@ -10,8 +10,10 @@ In this repository you can find:
 *NB! The items 3. and 4. above are automatically installed when using the ImageJ plugin. There is no need to download them individually.
 
 ## Installing the plugin:
-### Option 1): 
-Add this Update site:
+### Option 1 - Recommended!: 
+1. Requires FIJI installation: https://imagej.net/Fiji/Downloads.
+2. Open FIJI and click Help>Update>Manage Update Sites>Add update site
+3. Add “http://sites.imagej.net/ObjectColocalizationPlugins/” as the URL. 
 
 ### Option 2):
 Download the .jar file (NOT the ...sources.jar) from url below, and put in your ImageJ/FIJI /plugins/ folder:
