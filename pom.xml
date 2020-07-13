@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+		http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.scijava</groupId>
+		<artifactId>pom-scijava</artifactId>
+		<version>25.0.0</version>
+		<relativePath />
+	</parent>
+
+
+	<artifactId>Colocalization_Object_Counter</artifactId>
+	<version>1.0.0</version>
+
+	<name>Colocalization_Object_Counter</name>
+	<inceptionYear>2020</inceptionYear>
+	
+        <developers>
+        <developer><name>Anders Lunde</name>
+                <roles>
+                <role>founder</role>
+                <role>lead</role>
+                <role>support</role>
+                <role>developer</role>
+				<role>debugger</role>
+				<role>maintainer</role>
+                </roles>
+                </developer>
+		<developer>
+			<name>Muhammad Hassan Rehan</name>
+			<url>https://www.upwork.com/freelancers/~010555147016a598ef</url>
+			<roles>
+				<role>developer</role>
+			</roles>
+		</developer>
+	</developers>
+	
+	<contributors>
+		<contributor>
+			<name>Muhammad Hassan Rehan</name>
+			<url>http://na.na</url>
+			<roles><role>developer</role></roles>
+		</contributor>
+	</contributors>
+	
+	<mailingLists>
+		<mailingList>
+			<name>ImageJ Forum</name>
+			<archive>http://forum.imagej.net/</archive>
+		</mailingList>
+	</mailingLists>
+
+<licenses>
+  <license>
+    <name>GNU General Public License v3.0</name>
+    <url>na.na</url>
+    <distribution>repo</distribution>
+  </license>
+</licenses>
+
+<properties>
+	<license.licenseName>GPLv3</license.licenseName>
+	<license.copyrightOwners>Anders Lunde/Joel Glover/Univeristy of Oslo</license.copyrightOwners>
+</properties>
+
+<dependencies>
+<dependency>
+	<groupId>net.imagej</groupId>
+	<artifactId>ij</artifactId>
+	<scope>provided</scope>
+	<!--  <version>1.52n</version>  -->
+</dependency>
+</dependencies>
+
+<organization>
+	<name>uio</name>
+	<url>http://uio.no</url>
+</organization>
+<scm>
+	<url>http://127.0.0.1/dummy</url>
+	<connection>scm:svn:http://127.0.0.1/dummy</connection>
+	<developerConnection>scm:svn:https://127.0.0.1/dummy</developerConnection>
+	<tag>HEAD</tag>
+</scm>
+<issueManagement>
+	<system>test</system>
+	<url>http://test.com</url>
+</issueManagement>
+<ciManagement>
+	<system>test</system>
+	<url>http://test.com</url>
+</ciManagement>
+<url>http://test.com</url>
+<description>Colocalization_object_counter</description>
+</project>
