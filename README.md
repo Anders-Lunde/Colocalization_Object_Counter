@@ -2,10 +2,12 @@
 ## An ImageJ plugin for semi-automatic object based colocalization analysis
 
 In this repository you can find:
--the plugin .jar file
--the plugin source code
--the Microsoft Excel macro file
--the Matlab script.
+1. the plugin .jar file
+2. the plugin source code
+3. *the Microsoft Excel macro file (in folder: "Excel data organizer macro file")
+4. *the Matlab script. (in folder: "Matlab 3d visualization files")
+
+*NB! The items 3. and 4. above are automatically installed when using the ImageJ plugin. There is no need to download them individually.
 
 ## Installing the plugin:
 ### Option 1): 
