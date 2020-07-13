@@ -8,8 +8,8 @@ In this repository you can find the ImageJ plugin source code, Microsoft Excel m
 Add this Update site:
 
 ### Option 2):
-Download the .jar file (NOT the ...sources.jar) from url below, and put in your ImageJ/FIJI /plugins/ folder.
-![alt text](https://github.com/Anders-Lunde/Colocalization_Object_Counter/tree/master/target "target folder")
+Download the .jar file (NOT the ...sources.jar) from url below, and put in your ImageJ/FIJI /plugins/ folder:
+[I'm an inline-style link](https://github.com/Anders-Lunde/Colocalization_Object_Counter/tree/master/target)
 
 ## Full description of the plugin can be found in the original publication:
 
