@@ -3,6 +3,14 @@
 
 In this repository you can find the ImageJ plugin source code, Microsoft Excel macro file, and Matlab script.
 
+## Installing the plugin:
+### Option 1): 
+Add this Update site:
+
+### Option 2):
+Download the .jar file (NOT the ...sources.jar) from url below, and put in your ImageJ/FIJI /plugins/ folder.
+![alt text](https://github.com/Anders-Lunde/Colocalization_Object_Counter/tree/master/target "target folder")
+
 ## Full description of the plugin can be found in the original publication:
 
 ### This ImageJ plugin enables semi-automatic identification and quantification of image objects, with the opportunity to employ varying degrees of automation as desired. The  colocalization Object Counter is optimized for annotating and keeping track of each object’s colocalization category, that is, which fluorescent label(s) are associated with each object. The plugin also contains basic tools for subsequent 3D reconstruction of object and tissue contour data. 
