@@ -1,7 +1,11 @@
 # Colocalization Object Counter
 ## An ImageJ plugin for semi-automatic object based colocalization analysis
 
-In this repository you can find the ImageJ plugin source code, Microsoft Excel macro file, and Matlab script.
+In this repository you can find:
+-the plugin .jar file
+-the plugin source code
+-the Microsoft Excel macro file
+-the Matlab script.
 
 ## Installing the plugin:
 ### Option 1): 
