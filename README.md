@@ -1,5 +1,5 @@
 # Colocalization Object Counter
-## An ImageJ plugin for semi-automatic object based colocalization analysis
+## An ImageJ plugin for cell-by-cell semi-automatic object based colocalization analysis
 
 In this repository you can find:
 1. the plugin .jar file
