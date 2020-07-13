@@ -16,7 +16,7 @@ Add this Update site:
 ### Option 2):
 Download the .jar file (NOT the ...sources.jar) from url below, and put in your ImageJ/FIJI /plugins/ folder:
 
-[Link to plugin JAR file](https://github.com/Anders-Lunde/Colocalization_Object_Counter/tree/master/target)
+[Link to plugin JAR file](https://github.com/Anders-Lunde/Colocalization_Object_Counter/tree/master/target) (Click on the .jar file, and click "download" top right).
 
 ## Full description of the plugin can be found in the original publication:
 
