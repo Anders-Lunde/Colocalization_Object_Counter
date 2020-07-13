@@ -1,11 +1,43 @@
 # Colocalization Object Counter
 An ImageJ plugin for semi-automatic object based colocalization analysis
 
-ImageJ plugin source code, Microsoft Excel macro file, and Matlab script will be uploaded post-publication.
+In this repository you can find the ImageJ plugin source code, Microsoft Excel macro file, and Matlab script.
 
 
 This ImageJ plugin enables semi-automatic identification and quantification of image objects, with the opportunity to employ varying degrees of automation as desired. The  colocalization Object Counter is optimized for annotating and keeping track of each object’s colocalization category, that is, which fluorescent label(s) are associated with each object. The plugin also contains basic tools for subsequent 3D reconstruction of object and tissue contour data. 
 
 
+Purpose, input requirements, operation and output:
 
+The Colocalization Object Counter plugin enables semi-automatic identification, quantification and
+XYZ-coordinate designation of image objects, and comes with a set of effective and simple tools for
+assigning specific colocalization categories for each object.
+Any image readable by ImageJ can be used with the plugin, including those generated with the
+Colocalization Image Creator plugin. Objects can be defined manually by marking objects with the
+ImageJ “multipoint” tool, or automatically by using the built-in “automatic detection” tools. The
+highest accuracy and speed are normally achieved when automatic detection is followed by manual
+verification and adjustment. The plugin supports assignment of up to eight different categories per
+object, allowing for 28
+=256 possible colocalization combinations. See the Supplementary
+Information section online entitled “ImageJ plugin 2” for details on the plugin operation and user
+interfaces.
+Following assignment of objects and categories, data can be saved as files (comma separated value
+format, CSV) that include the XYZ-coordinates and the colocalization categories of each object, the
+image filename and additional image metadata. Colocalization categories are specified by a string of
+digits; for example, “358” designates an object that is positive for categories 3, 5 and 8. In a typical
+experiment the category “1” would be used to designate all objects of interest, and additional 
+15
+category designations would be used to annotate the presence of additional markers (such as
+fluorescent labels) within the objects. This of course requires a generic marker for the objects of
+interest, such as a cell-specific or nuclear marker. To help the user organize the data, all the output
+files are saved automatically in the same folder from which the image was loaded, in a subfolder
+called “Counts”. It is therefore highly recommended to store all images from the same experimental
+series in a single folder. Additional output files are generated in the same “Counts” folder after using
+the 3D serial reconstruction tools included with the Colocalization Object Counter plugin, which
+includes a tool for assigning the image origin coordinates and north direction, and a tool for drawing
+tissue contours (see below). Together with the object count data, these can be imported and
+analyzed with the associated Excel macro file (see below), and subsequently visualized in 3D with
+the associated Matlab script (see below). To facilitate logging of operator interventions for later
+review, all operations involving object counting are automatically logged in a file named
+“Counting_log.txt” in the “Counts” folder. 
 
