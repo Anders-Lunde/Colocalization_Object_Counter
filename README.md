@@ -1,5 +1,9 @@
 # Colocalization Object Counter
 ## An ImageJ plugin for cell-by-cell semi-automatic object based colocalization analysis
+![alt text](https://github.com/Anders-Lunde/Colocalization_Object_Counter/blob/master/Plugin%20overview.png "Plugin overview")
+
+## NB! This is the repository for Plugin 2 in the above image. Plugin 1 has its [own repository here](https://github.com/Anders-Lunde/Colocalization_Image_Creator).
+## NB 2! Both plugins with the Excel and Matlab files are automatically installed by adding our update site (see Installation - option 1).
 
 In this repository you can find:
 1. the plugin .jar file
@@ -16,9 +20,9 @@ In this repository you can find:
 3. Add “http://sites.imagej.net/ObjectColocalizationPlugins/” as the URL. 
 
 ### Option 2):
-Download the .jar file (NOT the ...sources.jar) from url below, and put in your ImageJ/FIJI /plugins/ folder:
+Download the most recent .jar file from url below, and put in your ImageJ/FIJI /plugins/ folder:
 
-[Link to plugin JAR file](https://github.com/Anders-Lunde/Colocalization_Object_Counter/tree/master/target) (Click on the .jar file, and click "download" top right).
+[Link to plugin JAR file](https://github.com/Anders-Lunde/Colocalization_Object_Counter/tree/master/jar-file) (Click on the .jar file, and click "download" top right).
 
 ## Full description of the plugin can be found in the original publication:
 
