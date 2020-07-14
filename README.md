@@ -20,9 +20,12 @@ In this repository you can find:
 3. Add “http://sites.imagej.net/ObjectColocalizationPlugins/” as the URL. 
 
 ### Option 2):
-Download the most recent .jar file from url below, and put in your ImageJ/FIJI /plugins/ folder:
+Download the most recent .jar files from urls below, and put in your ImageJ/FIJI /plugins/ folder:
 
-[Link to plugin JAR file](https://github.com/Anders-Lunde/Colocalization_Object_Counter/tree/master/jar-file) (Click on the .jar file, and click "download" top right).
+[Link to plugin 1 JAR file](https://github.com/Anders-Lunde/Colocalization_Image_Creator/tree/master/jar-file) (Click on the .jar file, and click "download" top right).
+
+[Link to plugin 2 JAR file](https://github.com/Anders-Lunde/Colocalization_Object_Counter/tree/master/jar-file) (Click on the .jar file, and click "download" top right).
+
 
 ## Full description of the plugin can be found in the original publication:
 
