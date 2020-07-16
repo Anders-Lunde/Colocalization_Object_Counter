@@ -18,6 +18,7 @@ In this repository you can find:
 1. Requires FIJI installation: https://imagej.net/Fiji/Downloads.
 2. Open FIJI and click Help>Update>Manage Update Sites>Add update site
 3. Add “http://sites.imagej.net/ObjectColocalizationPlugins/” as the URL. 
+4. Click Close>Apply changes.
 
 ### Option 2):
 Download the most recent .jar files from urls below, and put in your ImageJ/FIJI /plugins/ folder:
