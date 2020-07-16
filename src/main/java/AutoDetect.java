@@ -24,6 +24,7 @@ public class AutoDetect {
 	String noiseTolerance;
 	boolean excludeOnEdges, lightBackground, ignoreTopSlice, showOutput;
 	String radiusxy, radiusz;
+	boolean error;
 	
 	//Other values
 	ImagePlus currentImp, currentImp_duplicate, currentImp_duplicate_filtered;
@@ -36,8 +37,10 @@ public class AutoDetect {
 	
 	
 	public AutoDetect() {
+		this.error = false;
 		if (WindowManager.getCurrentImage() == null) {
 			IJ.showMessage("No image open.");
+			this.error = true;
 			return;
 		}
 		if (WindowManager.getWindow("Filtered output") != null) { //output from "Show filtered output"
@@ -95,24 +98,58 @@ public class AutoDetect {
 	
 	public void findMaxima_3d(ImagePlus currentImp_duplicate_filtered) {
 		if (!ij.Menus.getCommands().toString().toLowerCase().contains("3d maxima finder")) {
-			IJ.showMessage("ERROR: The MCIB3D 3D plugin was not found. This function requires the MCIB3D plugin. Please install the MCIB3D plugin, or use the FIJI version of ImageJ.");
+			IJ.showMessage("<html><b>ERROR: The 3D ImageJ Suite (MCIB3D) plugin was not found. </b><br>"
+					+ "<br>"
+					+ "<br>"
+					+ "<b>To install from FIJI:</b><br>"
+					+ "<br>"
+					+ "1. Click Help>Update>Manage Update Sites<br>"
+					+ "2. Activate \"3D ImageJ Suite | https://sites.imagej.net/Tboudier/ <br>"
+					+ "3. Click Close>Apply changes<br>"
+					+ "4. Restart FIJI<br>"
+					+ "<br>"
+					+ "<b>To install in ImageJ</b><br>"
+					+ "<br>"
+					+ "1. Download the most recent \"mcib3d-core\" and \"mcib3d-plugins\" .jar files from <a href=\"https://sites.imagej.net/Tboudier/plugins/mcib3d-suite/\">https://sites.imagej.net/Tboudier/plugins/mcib3d-suite/</a> <br>"
+					+ "2. Put the jar files in the ImageJ/plugins folder <br>"
+					+ "</html>");
 		}
 		else {
 			String command = "3D Maxima Finder";
 			String options = String.format("radiusxy=%s radiusz=%s noise=%s", radiusxy, radiusz, noiseTolerance);
+			if (ignoreTopSlice) { //This replaces the below deprecated code
+				if (currentImp_duplicate_filtered.getNSlices() > 1) {
+					if (lightBackground) {
+						double maxValue = currentImp_duplicate_filtered.getStack().getProcessor(1).maxValue();
+						currentImp_duplicate_filtered.getStack().getProcessor(1).set(maxValue); //make z=1 white //TODO: doesnt work with 3d. 3D maxima plugin has no option for this.
+					} else {
+					currentImp_duplicate_filtered.getStack().getProcessor(1).set(0); //make z=1 black
+					}
+				}
+			}
 			IJ.run(currentImp_duplicate_filtered, command, options);
 			WindowManager.getImage("peaks").close(); 
 			ResultsTable rt = ij.plugin.filter.Analyzer.getResultsTable();
 			rt.showRowNumbers(false);
+			double[] xpoints = rt.getColumnAsDoubles(0);
+			double[] ypoints = rt.getColumnAsDoubles(1);
+			double[] zpoints = rt.getColumnAsDoubles(2);
+
+
+			//DEPRECATED BELOW: Now, we delete top slice instead, to ignore top slice.
+			//The below code deleted any points that landed on top slice
+			
+			//Remove z == 1 if "ignore top slice" is enabled
+			/*
+			
 			double[] xpoints_beforeTopRemove = rt.getColumnAsDoubles(0);
 			double[] ypoints_beforeTopRemove = rt.getColumnAsDoubles(1);
 			double[] zpoints_beforeTopRemove = rt.getColumnAsDoubles(2);
-
+			
 			double[] xpoints = null;
 			double[] ypoints = null; 
 			double[] zpoints = null;
-			
-			//Remove z == 1 if "ignore top slice" is enabled
+	
 			if (zpoints_beforeTopRemove != null) {
 				if (ignoreTopSlice == false) {
 					xpoints = xpoints_beforeTopRemove;
@@ -146,6 +183,7 @@ public class AutoDetect {
 						}
 						i = i +1;
 			}}}
+			*/
 			
 			PointRoi multipoints = new PointRoi();
 			PointRoi multipoints_filteredImg = new PointRoi();

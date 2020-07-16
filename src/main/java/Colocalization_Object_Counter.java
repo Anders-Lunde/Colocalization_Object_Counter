@@ -50,6 +50,7 @@ public class Colocalization_Object_Counter implements PlugIn {
 		msg = msg + "\r\n";
 		msg = msg + "\r\n";
 		msg = msg + "Hints:\r\n";
+		msg = msg + "-Overlays/cells can be deleted by selecting and pressing \"del\" on the keyboard:\r\n";
 		msg = msg + "-Alt + left click to delete multipoints\r\n";
 		msg = msg + "-Hold spacebar + drag mouse button to pan\r\n";
 		msg = msg + "-Scroll mouse wheel to change Z-stack position\r\n";

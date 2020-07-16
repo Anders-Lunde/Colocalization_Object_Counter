@@ -128,20 +128,18 @@ public class UserInterface extends JFrame {
 		JButton btnAbout = new JButton("About");
 		btnAbout.setBackground(SystemColor.activeCaptionBorder);
 		btnAbout.addActionListener((ActionEvent e) -> {
-			menu = new JPopupMenu();
-			JLabel Pl = new JLabel(
-					"<html><b>Colocalization Object Counter</b><br>"
+			IJ.showMessage("<html><b>Colocalization Object Counter</b><br>"
 					+ "Plugin for semi-automatic Object-Based Colocalization Analysis.<br>"
 					+ "<br>"
 					+ "If you use this tool for a publication, please cite us:<br>"
-					+ "TODO: <a href=\"http://test.com\"> Instert link here</a><br>"
+					+ "TODO: <a href=\"http://vg.no/\"> http://vg.no</a><br>"
 					+ "<br>"
 					+ "<br>"
-					+ "Read the original publication, or the <a href=\\\"http://test.com\\\">wiki page</a> for instrucitons on how to use.<br>"
+					+ "Read the original publication at <a href=\"http://vg.no/\"> http://vg.no</a> for instrucitons on how to use.<br>"
+					+ "<br>"
+					+ "Report bugs at github: <a href=\"https://github.com/Anders-Lunde/Colocalization_Object_Counter/\"> https://github.com/Anders-Lunde/Colocalization_Object_Counter/</a> <br>"
+					+ "<br>"
 					+ "</html>");
-			menu.add(Pl);
-			showPopup(e);
-
 		});
 		menuBar.add(btnAbout);
 
@@ -303,7 +301,7 @@ public class UserInterface extends JFrame {
 			contentPane.add(lblToggleOverlaySelectable);
 
 			Selectable = new JCheckBox("New check box");
-			Selectable.setSelected(false);
+			Selectable.setSelected(true);
 			Selectable.setBackground(Color.LIGHT_GRAY);
 			Selectable.setBounds(115, 116, 21, 23);
 			Selectable.addActionListener((ActionEvent e) -> {
@@ -937,10 +935,12 @@ public class UserInterface extends JFrame {
 		btnNewButton_1.addActionListener((ActionEvent e) -> {
 			disableNewImageWarnings = true;
 			AutoDetect ad = new AutoDetect();
-			ad.findMaxima("2d");
-			ad = null;
-			System.gc();
-			disableNewImageWarnings = false;
+			if (ad.error == false) {
+				ad.findMaxima("2d");
+				ad = null;
+				System.gc();
+				disableNewImageWarnings = false;
+			}
 		});
 		
 
@@ -952,15 +952,17 @@ public class UserInterface extends JFrame {
 		detect3DBtn.setBounds(235, 430, 212, 23);
 		contentPane.add(detect3DBtn);
 		detect3DBtn.addActionListener((ActionEvent e) -> {
-			//Show warning if "Associate with slices" is not enabled. Only show once.
-			if (wasShown_find3DWarning == false && multipointsInSlices.isSelected() == false) {
-				IJ.showMessage("WARNING: Enable the 'Associate with slices: Overlays and Multipoints' checkboxes near top to see multipoints 3D positions"); 		
-				wasShown_find3DWarning = true;
-			}
 			AutoDetect ad = new AutoDetect();
-			ad.findMaxima("3d");
-			ad = null;
-			System.gc();
+			if (ad.error == false) {
+				ad.findMaxima("3d");
+				ad = null;
+				System.gc();
+				//Show warning if "Associate with slices" is not enabled. Only show once.
+				if (wasShown_find3DWarning == false && multipointsInSlices.isSelected() == false) {
+					IJ.showMessage("WARNING: To see multipoint 3D positions, enable \"Associate with slices: Overlays and Multipoints\" checkboxes, in the plugin menu (near the top)"); 		
+					wasShown_find3DWarning = true;
+				}
+			}
 		});
 		
 		
@@ -1144,17 +1146,15 @@ public class UserInterface extends JFrame {
 		btnConvertMulitipointTo.setFont(new Font("Arial", Font.BOLD, 10));
 		btnConvertMulitipointTo.addActionListener((ActionEvent e) -> {
 			
-			
 
-			
 			//try {
 				if (WindowManager.getWindow("Filtered output") != null) { //output from "Show filtered output"
 					WindowManager.getImage("Filtered output").close(); 
 					}
-				if(WindowManager.getCurrentImage().getOriginalFileInfo().directory == null) {
-					IJ.showMessage("Error: This image is not saved to a hard drive. Must save to disk before plugin can be used.");
+				if(imageNotSaved(WindowManager.getCurrentImage())) { //Displays error msg if not saved
 					return;
 				}
+
 				if (WindowManager.getCurrentImage().getRoi() == null) {
 					IJ.showMessage("Please draw mulipoints on image");
 					return;
@@ -1648,7 +1648,18 @@ public class UserInterface extends JFrame {
 	}
 	
 
-	
+	public static boolean imageNotSaved(ImagePlus img) {
+		if(img == null) {
+			IJ.showMessage("Error: No image open");
+			return true;
+		}
+		else if(img.getOriginalFileInfo().directory == null || img.getOriginalFileInfo().directory == "") {
+			IJ.showMessage("Error: This image is not saved to a hard drive. Must save to disk before plugin can be used.");
+			return true;
+		} else {
+			return false;
+		}
+	}
 	
 
 	
@@ -1693,7 +1704,10 @@ public class UserInterface extends JFrame {
 		*/
 		
 		//try {
-			ImagePlus currentImg = inputImp; //WindowManager.getCurrentImage();
+			//ImagePlus inputImp = WindowManager.getCurrentImage();
+			if(imageNotSaved(inputImp)) { //Displays error msg if not saved
+				return;
+			}
 			File logFilePath = UserInterface.createLogFileIfAbsent(inputImp);
 			
 	
@@ -1705,13 +1719,13 @@ public class UserInterface extends JFrame {
 	        infoString = infoString + "[" + timestamp + "]" + ", ";
 	        
 	        //Add filename
-	        infoString = infoString + "[" + currentImg.getTitle() + "]" + ", ";
+	        infoString = infoString + "[" + inputImp.getTitle() + "]" + ", ";
 	
 	        //Add active channel
-	        infoString = infoString + "[" +  "ActiveChannel:" + currentImg.getChannel() + "]" + ", ";
+	        infoString = infoString + "[" +  "ActiveChannel:" + inputImp.getChannel() + "]" + ", ";
 	        
 	        //Add active slice
-	        infoString = infoString + "[" + "ActiveSlice:" + currentImg.getSlice() + "]" + ", ";
+	        infoString = infoString + "[" + "ActiveSlice:" + inputImp.getSlice() + "]" + ", ";
 	        
 	        //Add event information
 	        infoString =  infoString + "[" + eventString + "]";
