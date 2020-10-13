@@ -110,8 +110,9 @@ public class AutoDetect {
 					+ "<br>"
 					+ "<b>To install in ImageJ</b><br>"
 					+ "<br>"
-					+ "1. Download the most recent \"mcib3d-core\" and \"mcib3d-plugins\" .jar files from <a href=\"https://sites.imagej.net/Tboudier/plugins/mcib3d-suite/\">https://sites.imagej.net/Tboudier/plugins/mcib3d-suite/</a> <br>"
-					+ "2. Put the jar files in the ImageJ/plugins folder <br>"
+					+ "1. Download the most recent \"mcib3d-core\" AND \"mcib3d-plugins\" files from <a href=\"https://sites.imagej.net/Tboudier/plugins/mcib3d-suite/\">https://sites.imagej.net/Tboudier/plugins/mcib3d-suite/</a> <br>"
+					+ "2. Put the files in the ImageJ/plugins folder <br>"
+					+ "3. Rename the files to have a .jar extension<br>"
 					+ "</html>");
 		}
 		else {

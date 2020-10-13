@@ -91,7 +91,7 @@ public class ClearCounts_LoadCounts_GenericAlert extends JDialog {
 				String[] zpointsStr = new String[xpoints.length];
 				for (int j = 0; j < names.length; j++) {
 					namesStr[j] = withBuilder(String.valueOf((int) names[j]));
-					zpointsStr[j] = withBuilder(String.valueOf((int) zpoints[j]));
+					zpointsStr[j] = String.valueOf((int) zpoints[j]);
 				}
 				Overlay ol = new Overlay();
 				for (int i = 0; i < xpoints.length; i++) {

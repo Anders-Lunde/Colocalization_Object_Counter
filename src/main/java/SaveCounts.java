@@ -23,6 +23,7 @@ public class SaveCounts {
 		for (int i = 0; i < ol.size(); i++) {
 			xpoints[i] = ol.get(i).getXBase() + (ol.get(i).getFloatWidth() / 2);
 			ypoints[i] = ol.get(i).getYBase() + (ol.get(i).getFloatHeight() / 2);
+			//System.out.println(ol.get(i).getProperty("customZ"));
 			zpoints[i] = Integer.parseInt(ol.get(i).getProperty("customZ"));
 			names[i] = ol.get(i).getName();
 		}

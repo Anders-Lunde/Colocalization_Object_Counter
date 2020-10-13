@@ -1,10 +1,16 @@
 import static ij.IJ.setTool;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Arrays;
+
 import ij.IJ;
 import ij.ImagePlus;
 import ij.plugin.MacroInstaller;
 import ij.plugin.PlugIn;
 import ij.gui.GenericDialog;
+import ij.gui.PointRoi;
 
 /**
  * @author Anders Lunde

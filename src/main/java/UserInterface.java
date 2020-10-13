@@ -59,6 +59,9 @@ import java.util.stream.Stream;
 import javax.swing.JLabel;
 import javax.swing.JCheckBox;
 import javax.swing.JRadioButton;
+import javax.swing.LookAndFeel;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JMenuItem;
@@ -105,7 +108,7 @@ public class UserInterface extends JFrame {
 		UserInputLogger userInputLogger = new UserInputLogger();
 		userInputLogger.run("");
 		
-		//Set some defaaults
+		//Set some defaults
 		IJ.run("Point Tool...", "type=Cross color=Cyan size=[Extra Large] counter=0"); //TODO: Remove ?
 		IJ.run("Overlay Options...", "set");
 		Prefs.showAllPoints = true; //If changed, also change corresponding checkbox default (associate multipoints with slices)  
@@ -125,21 +128,28 @@ public class UserInterface extends JFrame {
 		contentPane.add(menuBar);
 
 		// Menubar about section
-		JButton btnAbout = new JButton("About");
+		JButton btnAbout = new JButton("About/help");
 		btnAbout.setBackground(SystemColor.activeCaptionBorder);
 		btnAbout.addActionListener((ActionEvent e) -> {
+			LookAndFeel laf = UIManager.getLookAndFeel();
 			IJ.showMessage("<html><b>Colocalization Object Counter</b><br>"
 					+ "Plugin for semi-automatic Object-Based Colocalization Analysis.<br>"
 					+ "<br>"
 					+ "If you use this tool for a publication, please cite us:<br>"
-					+ "TODO: <a href=\"http://vg.no/\"> http://vg.no</a><br>"
+					+ "<a href=\"https://www.nature.com/srep/\"> Anticipated in Scientific Reports (Lunde&Glover 2020)</a><br>"
 					+ "<br>"
 					+ "<br>"
-					+ "Read the original publication at <a href=\"http://vg.no/\"> http://vg.no</a> for instrucitons on how to use.<br>"
+					+ "Read the original publication at <a href=\\\"https://www.nature.com/srep/\\\"> Anticipated in Scientific Reports (Lunde&Glover 2020)</a> for instrucitons on how to use.<br>"
 					+ "<br>"
 					+ "Report bugs at github: <a href=\"https://github.com/Anders-Lunde/Colocalization_Object_Counter/\"> https://github.com/Anders-Lunde/Colocalization_Object_Counter/</a> <br>"
 					+ "<br>"
-					+ "</html>");
+					+ "");
+			try {
+				UIManager.setLookAndFeel(laf);
+			} catch (UnsupportedLookAndFeelException e1) {
+				e1.printStackTrace();
+			}
+			
 		});
 		menuBar.add(btnAbout);
 
@@ -301,7 +311,7 @@ public class UserInterface extends JFrame {
 			contentPane.add(lblToggleOverlaySelectable);
 
 			Selectable = new JCheckBox("New check box");
-			Selectable.setSelected(true);
+			Selectable.setSelected(false);
 			Selectable.setBackground(Color.LIGHT_GRAY);
 			Selectable.setBounds(115, 116, 21, 23);
 			Selectable.addActionListener((ActionEvent e) -> {
