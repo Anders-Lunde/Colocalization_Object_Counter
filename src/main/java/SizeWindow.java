@@ -10,8 +10,11 @@ import javax.swing.JComboBox;
 import java.awt.Label;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
+import java.util.Arrays;
+
 import javax.swing.JButton;
 import javax.swing.JDialog;
+
 /**
  *
  * @author M. Hassan Rehan
@@ -19,6 +22,7 @@ import javax.swing.JDialog;
 public class SizeWindow extends JDialog {
 	private JPanel contentPane;
 	JComboBox comboBox, comboBox_1;
+
 	public SizeWindow() {
 		super((Window) null);
 		setModal(true);
@@ -50,7 +54,7 @@ public class SizeWindow extends JDialog {
 		btnNewButton.addActionListener((ActionEvent e) -> {
 			String width = String.valueOf(comboBox.getSelectedItem());
 			String height = String.valueOf(comboBox_1.getSelectedItem());
-
+			
 			ImagePlus currentImp = WindowManager.getCurrentImage();
 			Overlay ol = currentImp.getOverlay();
 			Overlay ol_2 = new Overlay();
@@ -71,6 +75,39 @@ public class SizeWindow extends JDialog {
 			if (!(IJ.getVersion().compareTo("1.51v18") < 0)) {
 				ol_2.selectable(ol.isSelectable());
 			}
+			
+			
+			/*
+			 * Transfering Z-information from ol to ol_2
+			 */
+			for (int i = 0; i < ol.size(); i++) {
+				if (ol.get(i).getProperties() != null) {
+					int a = Integer.parseInt(ol.get(i).getProperty("customZ"));
+					ol_2.get(i).setProperty("customZ", Integer.toString(a));
+			}}
+			if (UserInterface.overlayInSlices.isSelected()) {
+				for (int i = 0; i < ol.size(); i++) {
+					if (ol.get(i).getProperties() != null) {
+						int a = Integer.parseInt(ol.get(i).getProperty("customZ"));
+						if (currentImp.isHyperStack()) {
+							ol_2.get(i).setPosition(0,a,0); //Set Z pos to original Z pos //Display on all channels and frames, but tied to slice
+						} else {
+							ol_2.get(i).setPosition(a); //Set Z pos to original Z pos //tied to slice
+						}
+					}
+				}
+			} else {
+				for (int i = 0; i < ol.size(); i++) {
+					if (ol.get(i).getPosition() != 0) { //Store original Z pos
+						ol.get(i).setProperty("customZ", Integer.toString(ol.get(i).getPosition()));
+					}
+					if (currentImp.isHyperStack()) {
+						ol.get(i).setPosition(0,0,0); //Set Z pos to 0 which means to display in all slices	//Display on all channels and frames,
+						} else {
+						ol.get(i).setPosition(0); //Set Z pos to 0 which means to display in all slices	
+					}			
+				}
+			}
 			currentImp.setOverlay(ol_2);
 		});
 
@@ -86,10 +123,12 @@ public class SizeWindow extends JDialog {
 		setResizable(false);
 		setTitle("Resize");
 	}
+
 	public int getActiveWidth() {
 		String width = String.valueOf(comboBox.getSelectedItem());
 		return Integer.parseInt(width);
 	}
+
 	public int getActiveHeight() {
 		String height = String.valueOf(comboBox_1.getSelectedItem());
 		return Integer.parseInt(height);
