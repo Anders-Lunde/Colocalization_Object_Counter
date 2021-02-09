@@ -2,31 +2,32 @@
 ## An ImageJ plugin for cell-by-cell semi-automatic object based colocalization analysis
 ![alt text](https://github.com/Anders-Lunde/Colocalization_Object_Counter/blob/master/Plugin%20overview.png "Plugin overview")
 
+##Important links
+Link to paper at Scientific Reports: https://www.nature.com/articles/s41598-020-75835-7
 
-[Link to paper at Scientific Reports] (https://www.nature.com/articles/s41598-020-75835-7)
+Video explanation (Plugin 1): https://youtu.be/RkBK6qyowJI
 
-[Video explanation (part 1)] (https://youtu.be/RkBK6qyowJI)
-[Video explanation (part 2)] (https://youtu.be/JmdBDis4RxE)
+Video explanation (Plugin 2 + Excel + Matlab): https://youtu.be/JmdBDis4RxE
 
-Features:
+##Features:
 
-ImageJ plugin 1: Colocalization Image Creator:
+###ImageJ plugin 1: Colocalization Image Creator:
 *Pre-process multichannel Z-stack (or 2D) microscopy images into a visual format for faster, simpler, and more accurate colocalization analysis.
 *Designed to help avoid common colocalization analysis artifacts and errors.
 *Can transform Z-stack 3D data into a specialized 2D Z-projection where Z-projection colocalization artifacts are removed/reduced. This simplifies the analysis of 3D colocalization data.
 
-ImageJ plugin 2: Colocalization Object Counter:
+###ImageJ plugin 2: Colocalization Object Counter:
 *Quantity (count) cells/objects in a semi-automatic manner.
 *Assign, classify and keep track of multichannel signal presence/absence (colocalization analysis) for each cell/object.
 *Tools for subsequent 3D modeling/representation of data: draw tissue contours and indicate image-series global XY-origin.
 *Save data, load data, and export data to Excel.
 
-Custom Excel macro-file:
+###Custom Excel macro-file:
 *Import data from Colocalization Object Counter
 *Analyze and edit data from image series.
 *Export combined image series data to Matlab for 3D modeling
 
-Custom Matlab script:
+###Custom Matlab script:
 *3D visualize cells according to colocalization data
 *3D visualize tissue contours
 
