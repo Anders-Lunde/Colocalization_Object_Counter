@@ -11,30 +11,30 @@ Video explanation (Plugin 2 + Excel + Matlab): https://youtu.be/JmdBDis4RxE
 
 ## Features:
 
-### ImageJ plugin 1: Colocalization Image Creator:
-*Pre-process multichannel Z-stack (or 2D) microscopy images into a visual format for faster, simpler, and more accurate colocalization analysis.
-*Designed to help avoid common colocalization analysis artifacts and errors.
-*Can transform Z-stack 3D data into a specialized 2D Z-projection where Z-projection colocalization artifacts are removed/reduced. This simplifies the analysis of 3D colocalization data.
-*Meant for tissue slices a few cell layers deep, depending on density of cells-of-interest. Thicker 3D scans may be best to sub-divide into substacks (built-in ImageJ substack tool) prior to analysis with this tool.
+### ImageJ plugin 1: Colocalization Image Creator: 
+*Pre-process multichannel Z-stack (or 2D) microscopy images into a visual format for faster, simpler, and more accurate colocalization analysis.  
+*Designed to help avoid common colocalization analysis artifacts and errors.  
+*Can transform Z-stack 3D data into a specialized 2D Z-projection where Z-projection colocalization artifacts are removed/reduced. This simplifies the analysis of 3D colocalization data.  
+*Meant for tissue slices a few cell layers deep, depending on density of cells-of-interest. Thicker 3D scans may be best to sub-divide into substacks (built-in ImageJ substack tool) prior to analysis with this tool.  
+  
+### ImageJ plugin 2: Colocalization Object Counter:  
+*Quantity (count) cells/objects in a semi-automatic manner.  
+*Assign, classify and keep track of multichannel signal presence/absence (colocalization analysis) for each cell/object.  
+*Tools for subsequent 3D modeling/representation of data: draw tissue contours and indicate image-series global XY-origin.  
+*Save data, load data, and export data to Excel.  
+  
+### Custom Excel macro-file:  
+*Import data from Colocalization Object Counter  
+*Analyze and edit data from image series.  
+*Export combined image series data to Matlab for 3D modeling  
 
-### ImageJ plugin 2: Colocalization Object Counter:
-*Quantity (count) cells/objects in a semi-automatic manner.
-*Assign, classify and keep track of multichannel signal presence/absence (colocalization analysis) for each cell/object.
-*Tools for subsequent 3D modeling/representation of data: draw tissue contours and indicate image-series global XY-origin.
-*Save data, load data, and export data to Excel.
-
-### Custom Excel macro-file:
-*Import data from Colocalization Object Counter
-*Analyze and edit data from image series.
-*Export combined image series data to Matlab for 3D modeling
-
-### Custom Matlab script:
-*3D visualize cells according to colocalization data
-*3D visualize tissue contours
-
-I hope the community will appreciate our work. The ImageJ plugin 1 might be somewhat hard to understand how to use effectively (though we hope not - the video above should help), but ImageJ plugin 2 should be very simple and useful to the broader community. I found a good cell counting tool for ImageJ lacking, so maybe this plugin (and plugin 1) can be included as a standard part of FIJI.
-
-
+### Custom Matlab script:  
+*3D visualize cells according to colocalization data  
+*3D visualize tissue contours  
+  
+I hope the community will appreciate our work. The ImageJ plugin 1 might be somewhat hard to understand how to use effectively (though we hope not - the video above should help), but ImageJ plugin 2 should be very simple and useful to the broader community. I found a good cell counting tool for ImageJ lacking, so maybe this plugin (and plugin 1) can be included as a standard part of FIJI.  
+  
+  
 ## NB! This is the repository for Plugin 2 in the above image. Plugin 1 has its [own repository here](https://github.com/Anders-Lunde/Colocalization_Image_Creator).
 ## NB 2! Both plugins 1 + 2, including the Excel and Matlab files are automatically installed by adding our update site (see Installation - option 1).
 
