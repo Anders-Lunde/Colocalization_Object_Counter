@@ -74,13 +74,29 @@ public class AutoDetect {
 		} else if (mode.equals("3d")){ 
 			doStack = true;}
 		
+		//Get inclusion region, if there is one
+		Overlay ol = WindowManager.getCurrentImage().getOverlay();
+		Roi inclusionROI = null;
+		boolean wasInclusionOverlay = true;
+		if (ol != null) {
+			for (int i = 0; i < ol.size(); i++) {
+				if (ol.get(i).getProperty("inclusionRegion") != null) {
+					inclusionROI = (Roi) ol.get(i).clone();
+					wasInclusionOverlay = true;
+				}
+			}
+		}
+		
+		
 		currentImp_duplicate_filtered = applyFilterSettings();
 		currentImp_duplicate_filtered.setOverlay(null);
 		IJ.run(currentImp_duplicate_filtered, "Select None", "");
 		if (!doStack) {
-			findMaxima_2d(currentImp_duplicate_filtered);
+			findMaxima_2d(currentImp_duplicate_filtered, inclusionROI);
 		} else {
-			findMaxima_3d(currentImp_duplicate_filtered);}
+			findMaxima_3d(currentImp_duplicate_filtered, inclusionROI);}
+		
+		
 		
 		UserInterface.setPointerApperanceSettings(currentImp);
 		UserInterface.setPointerApperanceSettings(currentImp_duplicate_filtered);
@@ -96,7 +112,8 @@ public class AutoDetect {
 		System.gc();
 	}
 	
-	public void findMaxima_3d(ImagePlus currentImp_duplicate_filtered) {
+	public void findMaxima_3d(ImagePlus currentImp_duplicate_filtered, Roi inclusionROI) {
+		IJ.run(currentImp, "Select None", "");
 		if (!ij.Menus.getCommands().toString().toLowerCase().contains("3d maxima finder")) {
 			IJ.showMessage("<html><b>ERROR: The 3D ImageJ Suite (MCIB3D) plugin was not found. </b><br>"
 					+ "<br>"
@@ -203,6 +220,14 @@ public class AutoDetect {
 			else {
 				//Add maxima to current Z in image, and print info
 				for (int i=0; i<xpoints.length; i++) {
+					//Ignore any point outside inclusionROI
+					if (inclusionROI != null) {
+						if (!inclusionROI.contains((int) xpoints[i], (int) ypoints[i])) {
+							continue;
+						}
+					}
+					
+					
 					int insideOverlay = -1;
 					//Add rois to original image
 					currentImp.setZ((int) zpoints[i]+1);
@@ -246,13 +271,13 @@ public class AutoDetect {
 	}
 	
 	
-	public void findMaxima_2d(ImagePlus currentImp_duplicate_filtered) {
+	public void findMaxima_2d(ImagePlus currentImp_duplicate_filtered, Roi inclusionROI) {
 		IJ.run(currentImp_duplicate_filtered, "Find Maxima...", "noise=" + noiseTolerance + " output=[Point Selection]");
 		Roi maxima = currentImp_duplicate_filtered.getRoi();
 		IJ.log("\\Clear");
+		IJ.run(currentImp, "Select None", "");
 		
 		if (maxima == null) {
-			IJ.run(currentImp, "Select None", "");
 			//Save event to log:
 			String eventString = "Find 2D maxima: noise=" + noiseTolerance + " detectColor=" + detectColor + " detectInsideColor=" + detectInsideColor + " blurRadius=" + blurRadius + " excludeOnEdges=" + excludeOnEdges + " lightBackground=" + lightBackground;
 			UserInterface.saveAndDisplayEvent(currentImp, eventString);
@@ -271,6 +296,13 @@ public class AutoDetect {
 			
 			//Add maxima to current Z in image, and print info
 			for (Point p : maxima) {
+				//Ignore any point outside inclusionROI
+				if (inclusionROI != null) {
+					if (!inclusionROI.contains(p.x, p.y)) {
+						continue;
+					}
+				}
+				
 				i += 1;
 				int insideOverlay = -1;
 				//Add rois to original image
@@ -304,9 +336,9 @@ public class AutoDetect {
 			String eventString = "Find 2D maxima: noise=" + noiseTolerance + " detectColor=" + detectColor + " detectInsideColor=" + detectInsideColor + " blurRadius=" + blurRadius + " excludeOnEdges=" + excludeOnEdges + " lightBackground=" + lightBackground;
 			IJ.log(eventString);
 			UserInterface.saveAndDisplayEvent(currentImp, eventString);
-			UserInterface.saveAndDisplayEvent(currentImp, "Amount of maxima points found=" + maxima.size());
+			UserInterface.saveAndDisplayEvent(currentImp, "Amount of maxima points found=" + multipoints.size());
 			//Update image roi info for UserInputLogger
-			roiHistory.add(currentImp, (Roi) maxima.clone());
+			roiHistory.add(currentImp, (Roi) multipoints.clone());
 			roiHistory.addAllRoisDeleted(currentImp, false);
 		}
 	}

@@ -12,12 +12,15 @@ import ij.WindowManager;
 import ij.gui.OvalRoi;
 import ij.gui.Overlay;
 import ij.gui.PointRoi;
+import ij.gui.PolygonRoi;
 import ij.gui.Roi;
+import ij.io.Opener;
 import ij.measure.ResultsTable;
 import ij.plugin.ChannelSplitter;
 import ij.plugin.Duplicator;
 import ij.plugin.EventListener;
 import ij.plugin.ImageCalculator;
+import ij.plugin.filter.Analyzer;
 import ij.plugin.filter.MaximumFinder;
 import ij.plugin.frame.RoiManager;
 import ij.process.ImageProcessor;
@@ -59,6 +62,7 @@ import java.util.stream.Stream;
 import javax.swing.JLabel;
 import javax.swing.JCheckBox;
 import javax.swing.JRadioButton;
+import javax.swing.JSeparator;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -82,16 +86,18 @@ public class UserInterface extends JFrame {
 	SaveCounts SSI = new SaveCounts();
 	SetOriginAndNorth SOAN = new SetOriginAndNorth();
 	DrawContours DC = new DrawContours();
+	DrawInclusionRegion DR = new DrawInclusionRegion();
 	InformationTables table = new InformationTables();
 	JCheckBox Selectable;
 	static JCheckBox overlayInSlices;
 	static boolean disableNewImageWarnings = false;
 	boolean wasShown_find3DWarning = false;
+	boolean wasInclusionOverlay = false;
 	JCheckBox multipointsInSlices;
 	int toggler = 0; // for toggle multipoints button
 	int ActiveWidth = 50;
 	int ActiveHeight = 50;
-	int added_height_space = 60;
+	int added_height_space = 110;
 	RoiManager rm = RoiManager.getInstance();	
 	//Auto Detect Settings panel
 	static JFormattedTextField blurRadiusButton, noiseToleranceButton, radiusxyButton, radiuszButton;
@@ -99,7 +105,7 @@ public class UserInterface extends JFrame {
 	static JCheckBox excludeOnEdgesButton, lightBackgroundButton, ignoreTopSlice, showOutput;
 	
 
-
+	
 	/**
 	 * Create the frame.
 	 */
@@ -132,7 +138,7 @@ public class UserInterface extends JFrame {
 		btnAbout.setBackground(SystemColor.activeCaptionBorder);
 		btnAbout.addActionListener((ActionEvent e) -> {
 			LookAndFeel laf = UIManager.getLookAndFeel();
-			IJ.showMessage("<html><b>Colocalization Object Counter</b><br>"
+			IJ.showMessage("<html><b>Colocalization Object Counter. Version 1.1.0</b><br>"
 					+ "Plugin for semi-automatic Object-Based Colocalization Analysis.<br>"
 					+ "<br>"
 					+ "If you use this tool for a publication, please cite us:<br>"
@@ -206,7 +212,7 @@ public class UserInterface extends JFrame {
 		checkBox_8 = new JCheckBox("New check box");
 		checkBox_8.setBackground(new Color(192, 192, 192));
 		checkBox_8.setBounds(423, 50, 21, 23);
-		contentPane.add(checkBox_8);
+		contentPane.add(checkBox_8);		
 
 		// Counts section (button 2)
 		JLabel lblCounts = new JLabel("Counts:");
@@ -343,6 +349,7 @@ public class UserInterface extends JFrame {
 			overlayInSlices.addActionListener((ActionEvent e) -> {
 				ImagePlus currentImp = WindowManager.getCurrentImage();
 				if (currentImp != null) {
+					removeInclusionRegionFromOverlay();
 					if (currentImp.getOverlay() != null) {
 						Overlay ol = currentImp.getOverlay();
 						if (overlayInSlices.isSelected()) {
@@ -368,6 +375,10 @@ public class UserInterface extends JFrame {
 								}			
 							}
 						}
+					}
+					//Restore inclusion region
+					if (wasInclusionOverlay) {
+						loadInclusionRegion();
 					}
 				}
 				if (WindowManager.getCurrentImage() != null) {
@@ -419,7 +430,7 @@ public class UserInterface extends JFrame {
 		});
 
 		// Show/hide current category overlays button
-		JButton btnNewButton = new JButton("Show/hide category overlays");
+		JButton btnNewButton = new JButton("Toggle current category");
 		btnNewButton.setForeground(new Color(0, 0, 0));
 		btnNewButton.setFont(new Font("Arial", Font.BOLD, 11));
 		btnNewButton.setBounds(223, 146, 221, 23);
@@ -427,6 +438,7 @@ public class UserInterface extends JFrame {
 
 		btnNewButton.addActionListener((ActionEvent e) -> {
 			if (WindowManager.getCurrentImage() != null) {
+				removeInclusionRegionFromOverlay();
 				ImagePlus currentImp = WindowManager.getCurrentImage();
 				if (currentImp.getOverlay() != null) {
 					if (over == null) {
@@ -468,6 +480,10 @@ public class UserInterface extends JFrame {
 				} else
 					IJ.showMessage("Please draw some cells on image");
 
+				//Restore inclusion region
+				if (wasInclusionOverlay) {
+					loadInclusionRegion();
+				}	
 			} else
 				IJ.showMessage("Please open an image from drive");
 		});
@@ -587,12 +603,17 @@ public class UserInterface extends JFrame {
 		btnSetOverlaySize.addActionListener((ActionEvent e) -> {
 			ImagePlus currentImp = WindowManager.getCurrentImage();
 			if (currentImp != null) {
+				removeInclusionRegionFromOverlay();
 				Overlay ol = currentImp.getOverlay();
 				if (ol != null) {
 					SizeWindow sw = new SizeWindow();
 					sw.setVisible(true);
 					ActiveWidth = sw.getActiveWidth();
 					ActiveHeight = sw.getActiveHeight();
+				}
+				//Restore inclusion region
+				if (wasInclusionOverlay) {
+					loadInclusionRegion();
 				}
 			}
 
@@ -696,10 +717,13 @@ public class UserInterface extends JFrame {
 		contentPane.add(btnSaveCountsTo);
 		btnSaveCountsTo.addActionListener((ActionEvent e) -> {
 			if (WindowManager.getCurrentImage() != null) {
+
 				if (WindowManager.getCurrentImage().getOverlay() != null)
-					SSI.save();
-				else
+					{SSI.save();}
+				else {
 					IJ.showMessage("Please draw cells on image");
+			}
+				
 			} else
 				IJ.showMessage("No image open.");
 
@@ -977,6 +1001,65 @@ public class UserInterface extends JFrame {
 		
 		
 		
+		//////////////////////////
+		//Information related with Set inclusion region
+		//////////////////////////
+		JLabel lblInclusionRegion = new JLabel("Restrict counting area:");
+		lblInclusionRegion.setFont(new Font("Arial", Font.BOLD, 11));
+		lblInclusionRegion.setBackground(Color.WHITE);
+		lblInclusionRegion.setForeground(new Color(0, 0, 0));
+		lblInclusionRegion.setBounds(19, 460, 124, 14);
+		contentPane.add(lblInclusionRegion);
+		
+		
+		//Set inclusion region
+		JButton btnSetInclusion = new JButton("Set inclusion region");
+		btnSetInclusion.setForeground(new Color(0, 0, 0));
+		btnSetInclusion.setFont(new Font("Arial", Font.BOLD, 11));
+		btnSetInclusion.setBounds(19, 480, 145, 23);
+		btnSetInclusion.addActionListener((ActionEvent e) -> {
+			if (WindowManager.getCurrentImage() != null) {
+				removeInclusionRegionFromOverlay();
+				DR.RUN("");
+				wasInclusionOverlay = true;
+			}
+			else {
+				IJ.showMessage("ERROR: No image opened. Please open an image and try again.");
+			}
+		});
+		contentPane.add(btnSetInclusion);
+		
+		//Delete region
+		JButton btnDeleteRegion = new JButton("Delete region");
+		btnDeleteRegion.setForeground(new Color(0, 0, 0));
+		btnDeleteRegion.setFont(new Font("Arial", Font.BOLD, 11));
+		btnDeleteRegion.setBounds(19+145+5, 480, 110, 23);
+		btnDeleteRegion.addActionListener((ActionEvent e) -> {
+			ImagePlus currentImp = WindowManager.getCurrentImage();
+			if (currentImp != null) {
+				deleteSavedInclusionRegion();
+				IJ.run(currentImp, "Select None", "");
+			}
+			wasInclusionOverlay = false;
+		});
+		contentPane.add(btnDeleteRegion);
+		
+		
+		//Load region
+		JButton btnLoadRegion = new JButton("Load region");
+		btnLoadRegion.setForeground(new Color(0, 0, 0));
+		btnLoadRegion.setFont(new Font("Arial", Font.BOLD, 11));
+		btnLoadRegion.setBounds(19+145+5+110+5, 480, 100, 23);
+		btnLoadRegion.addActionListener((ActionEvent e) -> {
+			ImagePlus currentImp = WindowManager.getCurrentImage();
+			if (currentImp != null) {
+				loadInclusionRegion();
+			}
+			wasInclusionOverlay = true;
+		});
+		contentPane.add(btnLoadRegion);
+		
+		
 		// clear multipoints button
 		JButton btnClearMultipoints = new JButton("Clear multipoints");
 		btnClearMultipoints.setForeground(new Color(0, 0, 0));
@@ -1025,6 +1108,8 @@ public class UserInterface extends JFrame {
 				IJ.showMessage("No overlay drawn yet");
 				return;
 			}
+			removeInclusionRegionFromOverlay();
+			
 			//Log button press
 			saveAndDisplayEvent(WindowManager.getCurrentImage(), "Pressed: Toggle multipoints inside/outside/all overlays");
 			// Checking whether new multipoint is created or not during toggle
@@ -1146,8 +1231,13 @@ public class UserInterface extends JFrame {
 			default:
 				break;
 			}
+			//Restore inclusion region
+			if (wasInclusionOverlay) {
+				loadInclusionRegion();
+			}
 		});
 		contentPane.add(btnNewButton_2);
+		
 
 		// button 27 (Convert multipoints to overlays)
 		JButton btnConvertMulitipointTo = new JButton("Convert mulitipoint to overlays (using current mode)");
@@ -1157,6 +1247,7 @@ public class UserInterface extends JFrame {
 		btnConvertMulitipointTo.addActionListener((ActionEvent e) -> {
 			
 
+
 			//try {
 				if (WindowManager.getWindow("Filtered output") != null) { //output from "Show filtered output"
 					WindowManager.getImage("Filtered output").close(); 
@@ -1164,6 +1255,7 @@ public class UserInterface extends JFrame {
 				if(imageNotSaved(WindowManager.getCurrentImage())) { //Displays error msg if not saved
 					return;
 				}
+				removeInclusionRegionFromOverlay();
 
 				if (WindowManager.getCurrentImage().getRoi() == null) {
 					IJ.showMessage("Please draw mulipoints on image");
@@ -1357,6 +1449,12 @@ public class UserInterface extends JFrame {
 			String tmp = "Markers converted to overlays/cells. Current category = " + a + ", Current mode = " + currentMode;
 			saveAndDisplayEvent(WindowManager.getCurrentImage(), tmp);
 			
+			//Restore inclusion region
+			if (wasInclusionOverlay) {
+				loadInclusionRegion();
+			}
+			
+			
 			//} catch (Exception ie) {
 			//	IJ.showMessage("Please open an image from drive and draw multi-points to use plug-in");
 			//}
@@ -1413,6 +1511,9 @@ public class UserInterface extends JFrame {
 				IJ.showMessage("Please open an image from drive");
 				return;
 			}
+			
+			removeInclusionRegionFromOverlay();
+			
 			if (WindowManager.getCurrentImage().getOverlay() == null) {
 				IJ.showMessage("No cell drawn yet");
 				return;
@@ -1438,6 +1539,10 @@ public class UserInterface extends JFrame {
 			//For setting pointer apperances as selected in the pointer preferences, since they easily reset when programmaticaly created
 			setPointerApperanceSettings(currentImp);
 			saveAndDisplayEvent(currentImp, "Pressed: Make multipoints in all overlays. " + multipoints.size() + " multipoints created");
+			//Restore inclusion region
+			if (wasInclusionOverlay) {
+				loadInclusionRegion();
+			}
 		});
 
 		btnMultipointsInOverlays.setBounds(173, 455 + added_height_space, 271, 23);
@@ -1452,11 +1557,16 @@ public class UserInterface extends JFrame {
 		label_10.setForeground(new Color(105, 105, 105));
 		label_10.setBounds(0, 278, 498, 20);
 		contentPane.add(label_10);
-
+		
 		JLabel label_11 = new JLabel("______________________________________________________________________________");
 		label_11.setForeground(new Color(128, 128, 128));
-		label_11.setBounds(0, 397 + added_height_space, 498, 14);
+		label_11.setBounds(0, 445, 498, 14);
 		contentPane.add(label_11);
+
+		JLabel label_12 = new JLabel("______________________________________________________________________________");
+		label_12.setForeground(new Color(128, 128, 128));
+		label_12.setBounds(0, 397 + added_height_space, 498, 14);
+		contentPane.add(label_12);
 
 		// setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 469, 553 + added_height_space);
@@ -1465,7 +1575,72 @@ public class UserInterface extends JFrame {
 		setTitle("Colocalization cell counter");
 
 	}
+	
+	public void removeInclusionRegionFromOverlay() {
+		//Temporarily remove the inclusionRegion roi, to not mess up with the other
+		//overlay/roi algorithms
+		wasInclusionOverlay = false;
+		if (WindowManager.getCurrentImage().getOverlay() != null) {
+			Overlay ol = WindowManager.getCurrentImage().getOverlay();
+				for (int i = 0; i < ol.size(); i++) {
+					if (ol.get(i).getProperty("inclusionRegion") != null) {
+						ol.remove(i);
+						wasInclusionOverlay = true;
+					}
+				}
+		}
+	}
+	
+	public void loadInclusionRegion() {
+		//IJ.run(WindowManager.getCurrentImage(), "Select None", "");
+		removeInclusionRegionFromOverlay();
+		//Restore inclusionRegion
+		ImagePlus currentImp = WindowManager.getCurrentImage();
+		String rootPath = currentImp.getOriginalFileInfo().directory;
+		String imageFileName = currentImp.getOriginalFileInfo().fileName;
+		//String imageFileNameExtensionless = imageFileName.substring(0, imageFileName.lastIndexOf('.'));
+		File file = new File(rootPath + "/Counts/Regions/" + imageFileName + ".regions.csv");
+		if (!file.exists()) {
+			IJ.showMessage("No datafile found in " + "/Counts/Regions/" + imageFileName + ".regions.csv");
+			return;
+		}
+		ResultsTable tmpTable = new ResultsTable();
+		Opener.openResultsTable(rootPath + "/Counts/Regions/" + imageFileName + ".regions.csv");
+		tmpTable = Analyzer.getResultsTable();
+		tmpTable.showRowNumbers(false);
+		float[] xpoints = tmpTable.getColumn(0);
+		float[] ypoints = tmpTable.getColumn(1);
+		
+		//PolygonRoi param #3: RECTANGLE=0, OVAL=1, POLYGON=2, FREEROI=3, TRACED_ROI=4, LINE=5,
+	    //POLYLINE=6, FREELINE=7, ANGLE=8, COMPOSITE=9, POINT=10
+		PolygonRoi roi_inclusionRegion = new PolygonRoi(xpoints, ypoints, 3); 
+		//Convert to overlay, and give a special name property
+		if (WindowManager.getCurrentImage().getOverlay() == null) {
+			WindowManager.getCurrentImage().setOverlay(new Overlay());
+		}
+		Overlay ol = WindowManager.getCurrentImage().getOverlay();
+		
+		roi_inclusionRegion.setProperty("inclusionRegion", "true");
+		ol.add(roi_inclusionRegion);
+		ol.drawLabels(true);
+		ol.drawNames(true);
+		//Close results window
+		//WindowManager.getWindow(tmpTable.getTitle())
+         IJ.selectWindow(tmpTable.getTitle());
+         IJ.run("Close");
+         WindowManager.getCurrentImage().updateAndDraw();
 
+	}
+	
+	
+	public void deleteSavedInclusionRegion() {
+		removeInclusionRegionFromOverlay();
+		IJ.run(WindowManager.getCurrentImage(), "Select None", "");
+		wasInclusionOverlay = false;
+        WindowManager.getCurrentImage().updateAndDraw();
+		
+	}
+	
 	public static void setPointerApperanceSettings(ImagePlus inputImp) {
 		//ImagePlus currentImp = WindowManager.getCurrentImage();
 		if (inputImp != null) {
@@ -1623,6 +1798,7 @@ public class UserInterface extends JFrame {
 	}
 	// For table 2
 	public Object[][] getSimilarCellTableArray() {
+		removeInclusionRegionFromOverlay();
 		ImagePlus currentImp = WindowManager.getCurrentImage();
 		Overlay ol = currentImp.getOverlay();
 		ArrayList<String> arr = new ArrayList<>();
@@ -1644,6 +1820,10 @@ public class UserInterface extends JFrame {
 		for (int i = 0; i < categories.size(); i++) {
 			data[i][0] = categories.get(i);
 			data[i][1] = count.get(i);
+		}
+		//Restore inclusion region
+		if (wasInclusionOverlay) {
+			loadInclusionRegion();
 		}
 		return data;
 	}
