@@ -74,6 +74,8 @@ public class AutoDetect {
 		} else if (mode.equals("3d")){ 
 			doStack = true;}
 		
+		IJ.run(currentImp, "Select None", "");
+		
 		//Get inclusion region, if there is one
 		Overlay ol = WindowManager.getCurrentImage().getOverlay();
 		Roi inclusionROI = null;
@@ -238,6 +240,10 @@ public class AutoDetect {
 					//Print info with name reflecting inside/outside previous overlays
 					if (ol != null) {
 						for (int j = 0; j < ol.size(); j++) {
+							if (ol.get(j).getProperty("inclusionRegion") != null) {
+								//skip inclusion region
+								continue;
+							}
 							int olPos = ol.get(j).getZPosition();
 							if (olPos == 0 || olPos == zpoints[i] + 1) {
 								if (ol.get(j).contains((int) xpoints[i], (int) ypoints[i])) { //If point tied to existing overlay
@@ -313,6 +319,10 @@ public class AutoDetect {
 				//Print info with name reflecting inside/outside previous overlays
 				if (ol != null) {
 					for (int j = 0; j < ol.size(); j++) {
+						if (ol.get(j).getProperty("inclusionRegion") != null) {
+							//skip inclusion region
+							continue;
+						}
 						int olPos = ol.get(j).getZPosition();
 						if (olPos == 0 || olPos == pointZPos) {
 							if (ol.get(j).contains(p.x, p.y)) { //If point tied to existing overlay

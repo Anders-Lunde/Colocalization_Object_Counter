@@ -138,7 +138,7 @@ public class UserInterface extends JFrame {
 		btnAbout.setBackground(SystemColor.activeCaptionBorder);
 		btnAbout.addActionListener((ActionEvent e) -> {
 			LookAndFeel laf = UIManager.getLookAndFeel();
-			IJ.showMessage("<html><b>Colocalization Object Counter. Version 1.1.0</b><br>"
+			IJ.showMessage("<html><b>Colocalization Object Counter. Version 1.1.1</b><br>"
 					+ "Plugin for semi-automatic Object-Based Colocalization Analysis.<br>"
 					+ "<br>"
 					+ "If you use this tool for a publication, please cite us:<br>"

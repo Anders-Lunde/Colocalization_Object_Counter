@@ -1,5 +1,4 @@
 import ij.*;
-import ij.WindowManager;
 import ij.measure.ResultsTable;
 import ij.plugin.filter.Analyzer;
 import java.io.File;
