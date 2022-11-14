@@ -127,7 +127,8 @@ public class UserInterface extends JFrame {
 
 		// Menubar
 		JMenuBar menuBar = new JMenuBar();
-		menuBar.setMargin(new Insets(5, 5, 10, 5));
+		//menuBar.setMargin(new Insets(5, 5, 10, 5));
+		menuBar.setMargin(new Insets(1, 1, 1, 1));
 		menuBar.setForeground(Color.WHITE);
 		menuBar.setBackground(SystemColor.menu);
 		menuBar.setBounds(0, 0, 479, 23);
@@ -138,7 +139,7 @@ public class UserInterface extends JFrame {
 		btnAbout.setBackground(SystemColor.activeCaptionBorder);
 		btnAbout.addActionListener((ActionEvent e) -> {
 			LookAndFeel laf = UIManager.getLookAndFeel();
-			IJ.showMessage("<html><b>Colocalization Object Counter. Version 1.1.1</b><br>"
+			IJ.showMessage("<html><b>Colocalization Object Counter. Version 1.1.2</b><br>"
 					+ "Plugin for semi-automatic Object-Based Colocalization Analysis.<br>"
 					+ "<br>"
 					+ "If you use this tool for a publication, please cite us:<br>"

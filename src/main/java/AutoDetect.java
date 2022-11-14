@@ -148,7 +148,24 @@ public class AutoDetect {
 				}
 			}
 			IJ.run(currentImp_duplicate_filtered, command, options);
-			WindowManager.getImage("peaks").close(); 
+			
+			if (WindowManager.getImage("peaks") != null) {
+				WindowManager.getImage("peaks").close(); 
+				
+			} else {
+				//try to find the correct peaks image and close it
+				String[] openImages = WindowManager.getImageTitles();
+				for (String tmp : openImages) {
+					if (tmp.contains("peaks_") && !tmp.equals(this.currentImp.getTitle())) {
+					//close peaks img
+						WindowManager.getImage(tmp).close(); 
+					}
+				}
+			}
+				
+				
+			
+			
 			ResultsTable rt = ij.plugin.filter.Analyzer.getResultsTable();
 			rt.showRowNumbers(false);
 			double[] xpoints = rt.getColumnAsDoubles(0);
