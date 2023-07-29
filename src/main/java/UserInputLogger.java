@@ -33,7 +33,7 @@ import java.util.stream.StreamSupport;
 		
 		// called when an image is opened
 		public void imageOpened(ImagePlus imp) {
-			if (UserInterface.disableNewImageWarnings) {
+			if (CocUserInterface.disableNewImageWarnings) {
 				return;
 			}
 			String imgTitle = imp.getTitle();
@@ -89,7 +89,7 @@ import java.util.stream.StreamSupport;
 			if (currentRois == null && prevRois.size() == 1) {
 				String tmp = "Point deleted: xy: [" + prevRois.getXBase() + "," + prevRois.getYBase() + "]";
 				tmp = tmp.replace(".0",  "");
-				UserInterface.saveAndDisplayEvent(currentImg, tmp);
+				CocUserInterface.saveAndDisplayEvent(currentImg, tmp);
 			}
 		}
 		
@@ -97,7 +97,7 @@ import java.util.stream.StreamSupport;
 		if (currentRois == null) {
 			if (roiHistory.getValueAllRoisDeleted(currentImg) != null) { //Avoid repeating msg more than once
 				if (roiHistory.getValueAllRoisDeleted(currentImg) == false) { //Avoid repeating msg more than once
-					UserInterface.saveAndDisplayEvent(currentImg, "All markers removed ( amount of markers before this was = " + prevRois.size() + ")");
+					CocUserInterface.saveAndDisplayEvent(currentImg, "All markers removed ( amount of markers before this was = " + prevRois.size() + ")");
 					roiHistory.addAllRoisDeleted(currentImg, true);
 					return;
 				}
@@ -112,10 +112,10 @@ import java.util.stream.StreamSupport;
 			//mulipoints by clicking another selection on the image does NOT register as mouse release event
 			//This condition is to register those events
 			if (currentRois.size() == 1 && prevRois.size() > 2) {
-				UserInterface.saveAndDisplayEvent(currentImg, "All markers were removed. Single new point created:");
+				CocUserInterface.saveAndDisplayEvent(currentImg, "All markers were removed. Single new point created:");
 				String tmp = "New point created: xy: [" + currentRois.getXBase() + "," + currentRois.getYBase() + "]";
 				tmp = tmp.replace(".0",  "");
-				UserInterface.saveAndDisplayEvent(currentImg, tmp);
+				CocUserInterface.saveAndDisplayEvent(currentImg, tmp);
 				//Record new state
 				roiHistory.add(currentImg, (Roi) currentRois.clone());
 				roiHistory.addAllRoisDeleted(currentImg, false);
@@ -201,7 +201,7 @@ import java.util.stream.StreamSupport;
 			double x2 = createdRoi.x;
 			double y2 = createdRoi.y;
 			double distance = Math.sqrt((y2 - y1) * (y2 - y1) + (x2 - x1) * (x2 - x1));
-			UserInterface.saveAndDisplayEvent(currentImg, "Roi moved. Old xy: [" + deletedRoi.x + "," + deletedRoi.y + "]. New xy: [" + createdRoi.x + "," + createdRoi.y + "]. Distance = " + distance); 
+			CocUserInterface.saveAndDisplayEvent(currentImg, "Roi moved. Old xy: [" + deletedRoi.x + "," + deletedRoi.y + "]. New xy: [" + createdRoi.x + "," + createdRoi.y + "]. Distance = " + distance); 
 			//Record new state
 			roiHistory.add(currentImg, (Roi) currentRois.clone());
 			roiHistory.addAllRoisDeleted(currentImg, false);
@@ -211,12 +211,12 @@ import java.util.stream.StreamSupport;
 		if (deletedRoi != null && roisWereAllDeleted == false) {
 			String tmp = "Point deleted: xy: [" + deletedRoi.getX() + "," + deletedRoi.getY() + "]";
 			tmp = tmp.replace(".0",  "");
-			UserInterface.saveAndDisplayEvent(currentImg, tmp);
+			CocUserInterface.saveAndDisplayEvent(currentImg, tmp);
 		} 
 		if (createdRoi != null) {
 			String tmp = "New point created: xy: [" + createdRoi.getX() + "," + createdRoi.getY() + "]";
 			tmp = tmp.replace(".0",  "");
-			UserInterface.saveAndDisplayEvent(currentImg, tmp);
+			CocUserInterface.saveAndDisplayEvent(currentImg, tmp);
 		}
 
 		//Record new state

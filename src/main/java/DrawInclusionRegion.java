@@ -35,21 +35,24 @@ public class DrawInclusionRegion {
 
 		// Ask the user to draw the region using the freehand or polygon tool.
 		IJ.setTool("freehand");
-
-		IJ.showMessage(
+		
+		if (!CocUserInterface.supressPopups) {
+			CocUserInterface.showMessageCustom(
 				"Please draw a region in the image that will define where objects of interest are. Use the freehand, polygon, oval or rectangle tool.\n\nClick *OK* to save the coordinates to the /counts/regions folder (in subfolders where images are)");
+		}
 
+		
 		Roi roi = currentImp.getRoi();
 
 		// Check if roi is of correct type or not drawn.
 		if (roi == null) {
-			IJ.showMessage("ERROR: No usable roi drawn. Please try again.");
+			CocUserInterface.showMessageCustom("ERROR: No usable roi drawn. Please try again.");
 			return;
 		}
 		String roiType = roi.getTypeAsString();
 		if (!roiType.equals("Freehand") && !roiType.equals("Polygon") && !roiType.equals("Rectangle")
 				&& !roiType.equals("Oval")) {
-			IJ.showMessage("ERROR: No usable roi drawn/active. Please try again.");
+			CocUserInterface.showMessageCustom("ERROR: No usable roi drawn/active. Please try again.");
 			return;
 		}
 
@@ -86,7 +89,7 @@ public class DrawInclusionRegion {
 		if (tmp != null)
 			tmp.close(false);
 		{
-			IJ.showMessage("Inclusion region saved for file: " + imageFileName);
+			CocUserInterface.showMessageCustom("Inclusion region saved for file: " + imageFileName);
 		}
 		
 		

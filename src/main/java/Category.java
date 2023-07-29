@@ -39,7 +39,7 @@ public class Category {
 				int x = xpoints[i] - (int) (ActiveWidth / 2);
 				int y = ypoints[i] - (int) (ActiveHeight / 2);
 				Roi o = new OvalRoi(x, y, ActiveWidth, ActiveHeight);
-				if (UserInterface.overlayInSlices.isSelected()) {
+				if (CocUserInterface.overlayInSlices.isSelected()) {
 					if (currentImp.isHyperStack()) {
 						o.setPosition(0, pointZPos, 0); //Display on all channels and frames, but tied to slice
 					} else { 

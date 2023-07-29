@@ -202,7 +202,7 @@ public void SummaryAcrossImages_per_category() {
 		//String imageFileNameExtensionless = imageFileName.substring(0, imageFileName.lastIndexOf('.'));
 		File file = new File(rootPath + "/Counts/Celldata/" + imageFileName + ".csv");
 		if (!file.exists()) {
-			IJ.showMessage("No information save for this file: " + imageFileName);
+			CocUserInterface.showMessageCustom("No information save for this file: " + imageFileName);
 			return;
 		}
 		ResultsTable tmpTable = new ResultsTable();

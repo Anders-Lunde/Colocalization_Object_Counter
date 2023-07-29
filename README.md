@@ -70,6 +70,20 @@ Published in [paper at Scientific Reports] (https://www.nature.com/articles/s415
 
 ![alt text](https://github.com/Anders-Lunde/Colocalization_Object_Counter/blob/master/Colocalization%20Object%20Counter%20menu.png "Colocalization Object Counter menu")
 
+## Version log:
+
+1.2.0:
+Made the plugin macro recordable and controllable.
+
+1.1.2:
+Bug fix
+
+1.1.1:
+Bug fix 
+
+1.1.0:
+Added "inclusion region" feature, to allow areas outside a given region to be ignored.
+
 ## Introduction:
 
 Tools and methods that employ fully automatic colocalization analysis have the benefit of providing reproducibility and speed, albeit sometimes at the cost of accuracy. A major reason for lowered accuracy is that full automation of segmentation and object identification is a notoriously difficult problem to solve, especially for complex objects such as neurons 15,16. To address the need for a high-throughput OBCA workflow that does not rely exclusively on fallible automated algorithms and that leverages human visual processing capacity, we have developed a set of tools for semi-automatic OBCA that combines automation for speed with visual/manual verification for accuracy. The tools we present use image binarization and other operations to extract and visualize meaningful colocalization signals, but ultimate quantification is based on a centroid-like approach in which objects are defined by a single point. We emphasize the utility of visual verification and correction of automatic centroid placement, without the need to perform time consuming corrections to object delineations for quantification.

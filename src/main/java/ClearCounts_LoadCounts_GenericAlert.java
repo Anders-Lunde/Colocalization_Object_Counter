@@ -15,6 +15,7 @@ import java.util.Arrays;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 
@@ -34,7 +35,7 @@ public class ClearCounts_LoadCounts_GenericAlert extends JDialog {
 	public ClearCounts_LoadCounts_GenericAlert(String Message, int b) {
 		super((Window) null);
 		setModal(true);
-
+		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(null);
@@ -75,7 +76,7 @@ public class ClearCounts_LoadCounts_GenericAlert extends JDialog {
 				//String imageFileNameExtensionless = imageFileName.substring(0, imageFileName.lastIndexOf('.'));
 				File file = new File(rootPath + "/Counts/Celldata/" + imageFileName + ".csv");
 				if (!file.exists()) {
-					IJ.showMessage("No datafile found in " + "/Counts/Celldata/" + imageFileName + ".csv");
+					CocUserInterface.showMessageCustom("No datafile found in " + "/Counts/Celldata/" + imageFileName + ".csv");
 					dispose();
 					return;
 				}
@@ -101,7 +102,7 @@ public class ClearCounts_LoadCounts_GenericAlert extends JDialog {
 					Arrays.sort(aUnsorted);
 					namesStr[i] = String.join(",", aUnsorted);
 					oval.setName(namesStr[i]);
-					if (UserInterface.overlayInSlices.isSelected()) {
+					if (CocUserInterface.overlayInSlices.isSelected()) {
 						if (currentImp.isHyperStack()) {
 							oval.setPosition(0, (int) zpoints[i], 0); //Display on all channels and frames, but tied to slice
 						} else { 
@@ -116,7 +117,7 @@ public class ClearCounts_LoadCounts_GenericAlert extends JDialog {
 				//ol.setStrokeColor(Color.yellow);
 				//ol.setLabelColor(Color.yellow);
 				currentImp.setOverlay(ol);
-				UserInterface.saveAndDisplayEvent(currentImp, "Data loaded from file: " + rootPath + " Counts/Celldata/" + imageFileName + ".csv");
+				CocUserInterface.saveAndDisplayEvent(currentImp, "Data loaded from file: " + rootPath + " Counts/Celldata/" + imageFileName + ".csv");
 
 			}
 			dispose();
@@ -130,6 +131,9 @@ public class ClearCounts_LoadCounts_GenericAlert extends JDialog {
 			setBounds(100, 100, 568, 211);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 	}
+	
+
+    
 
 	private static String withBuilder(String s) {
 		StringBuilder builder = new StringBuilder(s);

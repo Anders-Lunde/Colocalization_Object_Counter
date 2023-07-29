@@ -53,7 +53,7 @@ public class SaveCounts {
 			if (!cellDataFile.renameTo(sameFileName)) {
 				// if the file didnt accept the renaming operation it means file
 				// is open
-				IJ.showMessage("Image data file is open.Please close it first");
+				CocUserInterface.showMessageCustom("Image data file is open.Please close it first");
 				return;
 			}
 		}
@@ -82,8 +82,8 @@ public class SaveCounts {
 		TextWindow tmp = ResultsTable.getResultsWindow();
 		if (tmp != null)
 			tmp.close(false);
-		IJ.showMessage("Data saved to file: /Counts/Celldata/" + imageFileName + ".csv");
-		UserInterface.saveAndDisplayEvent(currentImp, "Data saved to file: " + rootPath +  " Counts/Celldata/" + imageFileName + ".csv");
+		CocUserInterface.showMessageCustom("Data saved to file: /Counts/Celldata/" + imageFileName + ".csv");
+		CocUserInterface.saveAndDisplayEvent(currentImp, "Data saved to file: " + rootPath +  " Counts/Celldata/" + imageFileName + ".csv");
 		//Restore inclusion region
 		System.gc();
 	}

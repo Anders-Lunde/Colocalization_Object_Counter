@@ -39,7 +39,7 @@ public class AutoDetect {
 	public AutoDetect() {
 		this.error = false;
 		if (WindowManager.getCurrentImage() == null) {
-			IJ.showMessage("No image open.");
+			CocUserInterface.showMessageCustom("No image open.");
 			this.error = true;
 			return;
 		}
@@ -53,17 +53,17 @@ public class AutoDetect {
 		
 		
 		// Get variables from input buttons/boxes
-		this.detectColor = String.valueOf(UserInterface.detectColorButton.getSelectedItem());
-		this.detectInsideColor = String.valueOf(UserInterface.detectInsideColorButton.getSelectedItem());
-		this.blurRadius = Integer.parseInt(UserInterface.blurRadiusButton.getText());
+		this.detectColor = String.valueOf(CocUserInterface.detectColorButton.getSelectedItem());
+		this.detectInsideColor = String.valueOf(CocUserInterface.detectInsideColorButton.getSelectedItem());
+		this.blurRadius = Integer.parseInt(CocUserInterface.blurRadiusButton.getText());
 		//double noiseTolerance = Integer.parseInt(noiseToleranceButton.getText());
-		this.noiseTolerance = UserInterface.noiseToleranceButton.getText();
-		this.excludeOnEdges = UserInterface.excludeOnEdgesButton.isSelected();
-		this.lightBackground = UserInterface.lightBackgroundButton.isSelected();
-		this.ignoreTopSlice = UserInterface.ignoreTopSlice.isSelected();
-		this.showOutput = UserInterface.showOutput.isSelected();
-		this.radiusxy = UserInterface.radiusxyButton.getText();
-		this.radiusz = UserInterface.radiuszButton.getText();
+		this.noiseTolerance = CocUserInterface.noiseToleranceButton.getText();
+		this.excludeOnEdges = CocUserInterface.excludeOnEdgesButton.isSelected();
+		this.lightBackground = CocUserInterface.lightBackgroundButton.isSelected();
+		this.ignoreTopSlice = CocUserInterface.ignoreTopSlice.isSelected();
+		this.showOutput = CocUserInterface.showOutput.isSelected();
+		this.radiusxy = CocUserInterface.radiusxyButton.getText();
+		this.radiusz = CocUserInterface.radiuszButton.getText();
 		
 	}
 	
@@ -100,8 +100,8 @@ public class AutoDetect {
 		
 		
 		
-		UserInterface.setPointerApperanceSettings(currentImp);
-		UserInterface.setPointerApperanceSettings(currentImp_duplicate_filtered);
+		CocUserInterface.setPointerApperanceSettings(currentImp);
+		CocUserInterface.setPointerApperanceSettings(currentImp_duplicate_filtered);
 		
 		currentImp_duplicate_filtered.setTitle("Filtered output");
 		if (!showOutput) {
@@ -232,8 +232,8 @@ public class AutoDetect {
 				IJ.run(currentImp, "Select None", "");
 				String eventString = "Find 3D maxima: noise=" + noiseTolerance + " detectColor=" + detectColor + " detectInsideColor=" + detectInsideColor + " blurRadius=" + blurRadius + " excludeOnEdges=" + excludeOnEdges + " lightBackground=" + lightBackground + " radiXY=" + radiusxy + " radiZ=" + radiusz + " ignoreTopSlice=" + String.valueOf(ignoreTopSlice);
 				IJ.log(eventString);
-				UserInterface.saveAndDisplayEvent(currentImp, eventString);
-				UserInterface.saveAndDisplayEvent(currentImp, "Amount of maxima points found=0");
+				CocUserInterface.saveAndDisplayEvent(currentImp, eventString);
+				CocUserInterface.saveAndDisplayEvent(currentImp, "Amount of maxima points found=0");
 				roiHistory.addAllRoisDeleted(currentImp, true);
 				} 
 			else {
@@ -282,8 +282,8 @@ public class AutoDetect {
 				//Save event to log:
 				String eventString = "Find 3D maxima: noise=" + noiseTolerance + " detectColor=" + detectColor + " detectInsideColor=" + detectInsideColor + " blurRadius=" + blurRadius + " excludeOnEdges=" + excludeOnEdges + " lightBackground=" + lightBackground + " radiXY=" + radiusxy + " radiZ=" + radiusz + " ignoreTopSlice=" + String.valueOf(ignoreTopSlice);
 				IJ.log(eventString);
-				UserInterface.saveAndDisplayEvent(currentImp, eventString);
-				UserInterface.saveAndDisplayEvent(currentImp, "Amount of maxima points found=" + xpoints.length);
+				CocUserInterface.saveAndDisplayEvent(currentImp, eventString);
+				CocUserInterface.saveAndDisplayEvent(currentImp, "Amount of maxima points found=" + xpoints.length);
 				//Update image roi info for UserInputLogger
 				roiHistory.add(currentImp, (Roi) currentImp.getRoi().clone());
 				roiHistory.addAllRoisDeleted(currentImp, false);
@@ -303,8 +303,8 @@ public class AutoDetect {
 		if (maxima == null) {
 			//Save event to log:
 			String eventString = "Find 2D maxima: noise=" + noiseTolerance + " detectColor=" + detectColor + " detectInsideColor=" + detectInsideColor + " blurRadius=" + blurRadius + " excludeOnEdges=" + excludeOnEdges + " lightBackground=" + lightBackground;
-			UserInterface.saveAndDisplayEvent(currentImp, eventString);
-			UserInterface.saveAndDisplayEvent(currentImp, "Amount of maxima points found=0");
+			CocUserInterface.saveAndDisplayEvent(currentImp, eventString);
+			CocUserInterface.saveAndDisplayEvent(currentImp, "Amount of maxima points found=0");
 			IJ.log(eventString);
 			IJ.log("Amount of maxima points found=0");
 		}
@@ -362,8 +362,8 @@ public class AutoDetect {
 			//Save event to log:
 			String eventString = "Find 2D maxima: noise=" + noiseTolerance + " detectColor=" + detectColor + " detectInsideColor=" + detectInsideColor + " blurRadius=" + blurRadius + " excludeOnEdges=" + excludeOnEdges + " lightBackground=" + lightBackground;
 			IJ.log(eventString);
-			UserInterface.saveAndDisplayEvent(currentImp, eventString);
-			UserInterface.saveAndDisplayEvent(currentImp, "Amount of maxima points found=" + multipoints.size());
+			CocUserInterface.saveAndDisplayEvent(currentImp, eventString);
+			CocUserInterface.saveAndDisplayEvent(currentImp, "Amount of maxima points found=" + multipoints.size());
 			//Update image roi info for UserInputLogger
 			roiHistory.add(currentImp, (Roi) multipoints.clone());
 			roiHistory.addAllRoisDeleted(currentImp, false);

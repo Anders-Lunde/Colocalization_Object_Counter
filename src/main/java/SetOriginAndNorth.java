@@ -37,12 +37,12 @@ public class SetOriginAndNorth {
 		File originFile = new File(rootPath + "/Counts/Origin and North.csv");
 		// Ask the user to draw origin and angle with the line tool.
 		IJ.setTool("line"); // A bug prevents the gui from being updated(?)
-		new ClearCounts_LoadCounts_GenericAlert(
-				"Please draw a line, with starting point indicating origin,\nand angle the line towards a common reference point visible in all images (north).\nChose an origin which is visible or locatable in all images.\nIt is not important where you end the line, only the origin and the angle of the line matters.\n\nClick *OK* to save the line coordinates to the /counts folder (in subfolder where images are).",
-				3).show();
+		//new ClearCounts_LoadCounts_GenericAlert(
+		//		"Please draw a line, with starting point indicating origin,\nand angle the line towards a common reference point visible in all images (north).\nChose an origin which is visible or locatable in all images.\nIt is not important where you end the line, only the origin and the angle of the line matters.\n\nClick *OK* to save the line coordinates to the /counts folder (in subfolder where images are).",
+		//		3);
 		Roi roi = currentImp.getRoi();
 		if (roi == null || !roi.isLine()) {
-			IJ.showMessage("ERROR: No line segment was drawn. Select the line segment tool and try again.");
+			CocUserInterface.showMessageCustom("ERROR: No line segment was drawn. Select the line segment tool and try again. \nPlease draw a line, with starting point indicating origin,\nand angle the line towards a common reference point visible in all images (north).\nChose an origin which is visible or locatable in all images.\nIt is not important where you end the line, only the origin and the angle of the line matters.\nThis information is used to translate x/y coordinates for all images in the same folder \nto a common reference point (the point you start at with the line segment tool). \nThe translated coordinates is visible and used only in the Excel file. \nClick *OK* to save the line coordinates to the /counts folder (in subfolder where images are).");
 			return;
 		}
 		//Subtract 90 to make up in the image north (imageJ gives angle from horizontal line)
@@ -94,7 +94,7 @@ public class SetOriginAndNorth {
 		TextWindow tmp = ResultsTable.getResultsWindow();
 		if (tmp != null)
 			tmp.close(false);
-		IJ.showMessage("Conformation", "Data saved to file: /Counts/Origin and North.csv");
+		CocUserInterface.showMessageCustom("Data saved to file: /Counts/Origin and North.csv");
 		System.gc();
 	}
 }

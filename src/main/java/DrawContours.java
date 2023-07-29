@@ -38,20 +38,20 @@ public class DrawContours {
 		// Ask the user to draw the contour using the freehand or polygon tool.
 		IJ.setTool("freehand");
 
-		IJ.showMessage(
+		CocUserInterface.showMessageCustom(
 				"Please draw a contour around the image, indicating edge of tissue or other feature you wish to visualize. Use the freehand, polygon, oval or rectangle tool.\n\nClick *OK* to save the coordinates to the /counts/contours folder (in subfolders where images are)");
 
 		Roi roi = currentImp.getRoi();
 
 		// Check if roi is of correct type or not drawn.
 		if (roi == null) {
-			IJ.showMessage("ERROR: No usable roi drawn. Please try again.");
+			CocUserInterface.showMessageCustom("ERROR: No usable roi drawn. Please try again.");
 			return;
 		}
 		String roiType = roi.getTypeAsString();
 		if (!roiType.equals("Freehand") && !roiType.equals("Polygon") && !roiType.equals("Rectangle")
 				&& !roiType.equals("Oval")) {
-			IJ.showMessage("ERROR: No usable roi drawn/active. Please try again.");
+			CocUserInterface.showMessageCustom("ERROR: No usable roi drawn/active. Please try again.");
 			return;
 		}
 
@@ -88,7 +88,7 @@ public class DrawContours {
 		if (tmp != null)
 			tmp.close(false);
 		{
-			IJ.showMessage("Values saved for file: " + imageFileName);
+			CocUserInterface.showMessageCustom("Values saved for file: " + imageFileName);
 		}
 		System.gc();
 	}
