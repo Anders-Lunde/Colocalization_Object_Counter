@@ -61,6 +61,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.text.NumberFormat;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
@@ -201,6 +202,14 @@ public class CocUserInterface extends JFrame {
 			showMacroInfoPopup();
 		});
 		menuBar.add(btnMacroHelp);
+
+		JButton btnExportSummary = new JButton("Export summary");
+		btnExportSummary.setName("btnExportSummary");
+		btnExportSummary.setBackground(SystemColor.activeCaptionBorder);
+		btnExportSummary.addActionListener((ActionEvent e) -> {
+			exportSessionSummary();
+		});
+		menuBar.add(btnExportSummary);
 
 		// category section (button 1)
 		JLabel lblNewLabel = new JLabel("Category:\r\n");
@@ -1852,6 +1861,64 @@ public class CocUserInterface extends JFrame {
 		Point p = b.getLocationOnScreen();
 		menu.show(this, 0, 0);
 		menu.setLocation(p.x, p.y + b.getHeight());
+	}
+
+	private void exportSessionSummary() {
+		ImagePlus currentImp = WindowManager.getCurrentImage();
+		if (imageNotSaved(currentImp)) {
+			return;
+		}
+
+		removeInclusionRegionFromOverlay();
+		try {
+			String rootPath = currentImp.getOriginalFileInfo().directory;
+			String imageFileName = currentImp.getOriginalFileInfo().fileName;
+			ArrayList<SessionSummaryExporter.ObjectRecord> records = getActiveObjectRecords(currentImp.getOverlay());
+			SessionSummaryExporter.Summary summary = SessionSummaryExporter.createSummary(
+					imageFileName,
+					LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+					records,
+					new File(rootPath + "/Counts/Regions/" + imageFileName + ".regions.csv").exists(),
+					new File(rootPath + "/Counts/Contours/" + imageFileName + ".contours.csv").exists(),
+					hasOriginAndNorthForImage(new File(rootPath + "/Counts/Origin and North.csv"), imageFileName));
+			File outputFile = new File(rootPath + "/Counts/Summaries/" + imageFileName + ".summary.csv");
+			SessionSummaryExporter.writeCsv(outputFile, summary);
+			showMessageCustom("Summary exported to file: /Counts/Summaries/" + imageFileName + ".summary.csv");
+			saveAndDisplayEvent(currentImp, "Summary exported to file: " + outputFile.getPath());
+		} catch (IOException ex) {
+			showMessageCustom("ERROR: Could not export summary. " + ex.getMessage());
+		} finally {
+			if (wasInclusionOverlay) {
+				loadInclusionRegion();
+			}
+		}
+	}
+
+	private ArrayList<SessionSummaryExporter.ObjectRecord> getActiveObjectRecords(Overlay overlay) {
+		ArrayList<SessionSummaryExporter.ObjectRecord> records = new ArrayList<SessionSummaryExporter.ObjectRecord>();
+		if (overlay == null) {
+			return records;
+		}
+		for (int i = 0; i < overlay.size(); i++) {
+			Roi roi = overlay.get(i);
+			if (roi.getProperty("inclusionRegion") != null) {
+				continue;
+			}
+			records.add(new SessionSummaryExporter.ObjectRecord(roi.getName()));
+		}
+		return records;
+	}
+
+	private boolean hasOriginAndNorthForImage(File originFile, String imageFileName) throws IOException {
+		if (!originFile.exists()) {
+			return false;
+		}
+		Stream<String> lines = Files.lines(Paths.get(originFile.getPath()));
+		try {
+			return lines.anyMatch(line -> line.equals(imageFileName) || line.startsWith(imageFileName + ","));
+		} finally {
+			lines.close();
+		}
 	}
 
 	// Method for updating counts
